@@ -49,7 +49,127 @@ class BonechewerBrawler(MinionNoPoint):
     value = 2
     keep_in_hand_bool = True
 
+class InjuredTolvir(MinionNoPoint):
+    value = 2
+    keep_in_hand_bool = True
+    id = "CORE_ULD_271"
 
+class ShadowAscendant(MinionNoPoint):
+    value = 2
+    keep_in_hand_bool = True
+    id = "CORE_ICC_210"
+
+class AcolyteOfPain(MinionNoPoint):
+    value = 3.4
+    keep_in_hand_bool = True
+    id = "CORE_EX1_007"
+
+class RelentlessWorg(MinionNoPoint):
+    value = 3
+    keep_in_hand_bool = True
+    id = "TTN_733"
+
+class TarCreeper(MinionNoPoint):
+    value = 3.5
+    keep_in_hand_bool = True
+    id = "CORE_UNG_928"
+
+class ChillwindYeti(MinionNoPoint):
+    value = 4
+    keep_in_hand_bool = False
+    id = "CORE_CS2_182"
+
+class ImposingAnubisath(MinionNoPoint):
+    value = 4.7
+    keep_in_hand_bool = False
+    id = "TTN_931"
+
+class SaroniteTolvir(MinionNoPoint):
+    value = 4.4
+    keep_in_hand_bool = False
+    id = "TTN_711"
+
+class RottenApplebaum(MinionNoPoint):
+    value = 5
+    keep_in_hand_bool = False
+    id = "CORE_GIL_667"
+
+class TaelanFording(MinionNoPoint):
+    value = 5
+    keep_in_hand_bool = False
+    id = "CS3_024"
+
+class DrBoom(MinionNoPoint):
+    value = 7
+    keep_in_hand_bool = False
+    id = "CORE_GVG_110"
+
+class ContainmentUnit(MinionNoPoint):
+    value = 7.5
+    keep_in_hand_bool = False
+    id = "TTN_700"
+
+class PrimordianlDrake(MinionNoPoint):
+    value = 8
+    keep_in_hand_bool = False
+    id = "CORE_UNG_848"
+
+class SleepyDragon(MinionNoPoint):
+    value = 9
+    keep_in_hand_bool = False
+    id = "CORE_LOOT_137"
+
+class StonebornGeneral(MinionNoPoint):
+    value = 10
+    keep_in_hand_bool = False
+    id = "REV_375"
+
+class OnyxiaTheBloodMother(MinionNoPoint):
+    value = 9
+    keep_in_hand_bool = False
+    id = "CS3_032"
+
+class NeptulonTheTidehunter(MinionNoPoint):
+    value = 10.5
+    keep_in_hand_bool = False
+    id = "TID_712"
+
+class Mothership(MinionNoPoint):
+    value = 6
+    keep_in_hand_bool = False
+    id = "TSC_645"
+
+class GangplankDiver(MinionNoPoint):
+    value = 5
+    keep_in_hand_bool = False
+    id = "TSC_007"
+
+class StudentOfStars(MinionNoPoint):
+    value = 3.9
+    keep_in_hand_bool = False
+    id = "TTN_482"
+
+class Drown(SpellPointOppo):
+    wait_time = 5
+    bias = -8
+    id = "TID_920"
+
+    @classmethod
+    def best_h_and_arg(cls, state, hand_card_index):
+        best_oppo_index = -1
+        best_delta_h = 0
+
+        for oppo_index, oppo_minion in enumerate(state.oppo_minions):
+            if not oppo_minion.can_be_pointed_by_spell:
+                continue
+
+            tmp = oppo_minion.heuristic_val + cls.bias
+            if tmp > best_delta_h:
+                best_delta_h = tmp
+                best_oppo_index = oppo_index
+
+        return best_delta_h, best_oppo_index
+    
 # 暗言术灭
 class ShadowWordDeath(SpellPointOppo):
     wait_time = 1.5
