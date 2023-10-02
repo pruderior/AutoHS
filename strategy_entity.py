@@ -28,6 +28,10 @@ class StrategyEntity:
         pass
 
     @property
+    def get_cost(self):
+        return self.current_cost
+
+    @property
     def is_coin(self):
         return self.name == "幸运币"
 

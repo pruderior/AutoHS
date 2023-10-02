@@ -68,11 +68,16 @@ ID2CARD_DICT = {
     StonebornGeneral.id: StonebornGeneral,
     ContainmentUnit.id: ContainmentUnit,
     AcolyteOfPain.id: AcolyteOfPain,
-    ShadowAscendant.id:ShadowAscendant,
-    OnyxiaTheBloodMother.id:OnyxiaTheBloodMother,
-    NeptulonTheTidehunter.id:NeptulonTheTidehunter,
-    Mothership.id:Mothership,
-    GangplankDiver.id:GangplankDiver,
-    StudentOfStars.id:StudentOfStars,
-    Drown.id:Drown
+    ShadowAscendant.id: ShadowAscendant,
+    OnyxiaTheBloodMother.id: OnyxiaTheBloodMother,
+    NeptulonTheTidehunter.id: NeptulonTheTidehunter,
+    Mothership.id: Mothership,
+    GangplankDiver.id: GangplankDiver,
+    StudentOfStars.id: StudentOfStars,
+    Drown.id: Drown,
+    TroggExile.id: TroggExile,
+    MishMashMosher.id: MishMashMosher,
+    OverlordRunthak.id:OverlordRunthak,
+    MagathaBaneOfMusic.id: MagathaBaneOfMusic,
+    DirtyRat.id:DirtyRat
 }
