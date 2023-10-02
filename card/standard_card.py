@@ -1,4 +1,5 @@
 from card.basic_card import *
+from utils import *
 
 
 # 护甲商贩
@@ -50,7 +51,197 @@ class BonechewerBrawler(MinionNoPoint):
     keep_in_hand_bool = True
 
 
+class InjuredTolvir(MinionNoPoint):
+    value = 2
+    keep_in_hand_bool = True
+    id = "CORE_ULD_271"
+
+
+class ShadowAscendant(MinionNoPoint):
+    value = 2
+    keep_in_hand_bool = True
+    id = "CORE_ICC_210"
+
+
+class AcolyteOfPain(MinionNoPoint):
+    value = 3.4
+    keep_in_hand_bool = True
+    id = "CORE_EX1_007"
+
+
+class RelentlessWorg(MinionNoPoint):
+    value = 3
+    keep_in_hand_bool = True
+    id = "TTN_733"
+
+
+class TarCreeper(MinionNoPoint):
+    value = 3.5
+    keep_in_hand_bool = True
+    id = "CORE_UNG_928"
+
+
+class ChillwindYeti(MinionNoPoint):
+    value = 4
+    keep_in_hand_bool = False
+    id = "CORE_CS2_182"
+
+
+class ImposingAnubisath(MinionNoPoint):
+    value = 4.7
+    keep_in_hand_bool = False
+    id = "TTN_931"
+
+
+class SaroniteTolvir(MinionNoPoint):
+    value = 4.4
+    keep_in_hand_bool = False
+    id = "TTN_711"
+
+
+class RottenApplebaum(MinionNoPoint):
+    value = 5
+    keep_in_hand_bool = False
+    id = "CORE_GIL_667"
+
+
+class TaelanFording(MinionNoPoint):
+    value = 5
+    keep_in_hand_bool = False
+    id = "CS3_024"
+
+
+class DrBoom(MinionNoPoint):
+    value = 7
+    keep_in_hand_bool = False
+    id = "CORE_GVG_110"
+
+
+class ContainmentUnit(MinionNoPoint):
+    value = 7.5
+    keep_in_hand_bool = False
+    id = "TTN_700"
+
+
+class PrimordianlDrake(MinionNoPoint):
+    value = 8
+    keep_in_hand_bool = False
+    id = "CORE_UNG_848"
+
+
+class SleepyDragon(MinionNoPoint):
+    value = 9
+    keep_in_hand_bool = False
+    id = "CORE_LOOT_137"
+
+
+class StonebornGeneral(MinionNoPoint):
+    value = 10
+    keep_in_hand_bool = False
+    id = "REV_375"
+
+
+class OnyxiaTheBloodMother(MinionNoPoint):
+    value = 9
+    keep_in_hand_bool = False
+    id = "CS3_032"
+
+
+class NeptulonTheTidehunter(MinionNoPoint):
+    value = 10.5
+    keep_in_hand_bool = False
+    id = "TID_712"
+
+
+class Mothership(MinionNoPoint):
+    value = 6
+    keep_in_hand_bool = False
+    id = "TSC_645"
+
+
+class GangplankDiver(MinionNoPoint):
+    value = 5
+    keep_in_hand_bool = False
+    id = "TSC_007"
+
+
+class StudentOfStars(MinionNoPoint):
+    value = 3.9
+    keep_in_hand_bool = False
+    id = "TTN_482"
+
+
+class TroggExile(MinionNoPoint):
+    value = 8
+    keep_in_hand_bool = False
+    id = "TTN_832"
+
+
+class MishMashMosher(MinionNoPoint):
+    value = 8
+    keep_in_hand_bool = False
+    id = "ETC_419"
+
+
+class OverlordRunthak(MinionNoPoint):
+    value = 5.5
+    keep_in_hand_bool = False
+    id = "CS3_025"
+
+
+class MagathaBaneOfMusic(MinionNoPoint):
+    value = 5.1
+    keep_in_hand_bool = False
+    id = "JAM_036"
+    bias = -6
+
+    @classmethod
+    def best_h_and_arg(cls, state, hand_card_index):
+        best_oppo_index = -1
+        num_of_card = len(state.my_hand_cards)
+        cardValue = (5 - num_of_card) * 4 + 25
+        return cardValue, best_oppo_index
+
+
+class DirtyRat(MinionNoPoint):
+    value = 2.9
+    keep_in_hand_bool = False
+    id = "CORE_CFM_790"
+    bias = -6
+
+    @classmethod
+    def best_h_and_arg(cls, state, hand_card_index):
+        best_oppo_index = -1
+        mana = get_current_mana(state) - 2
+        if can_play_card(ShadowWordDeath, mana, state) or can_play_card(Drown, mana, state):
+            return 8 + 5, best_oppo_index
+        return 6, best_oppo_index
+
+
+class Drown(SpellPointOppo):
+    wait_time = 5
+    bias = -8
+    id = "TID_920"
+
+    @classmethod
+    def best_h_and_arg(cls, state, hand_card_index):
+        best_oppo_index = -1
+        best_delta_h = 0
+
+        for oppo_index, oppo_minion in enumerate(state.oppo_minions):
+            if not oppo_minion.can_be_pointed_by_spell:
+                continue
+
+            tmp = oppo_minion.heuristic_val + cls.bias
+            if tmp > best_delta_h:
+                best_delta_h = tmp
+                best_oppo_index = oppo_index
+
+        return best_delta_h, best_oppo_index
+
 # 暗言术灭
+
+
 class ShadowWordDeath(SpellPointOppo):
     wait_time = 1.5
     bias = -6
@@ -88,7 +279,7 @@ class Apotheosis(SpellPointMine):
                 continue
 
             tmp = cls.bias + 3 + (my_minion.health + 2) / 4 + \
-                  (my_minion.attack + 1) / 2
+                (my_minion.attack + 1) / 2
             if my_minion.can_attack_minion:
                 tmp += my_minion.attack / 4
             if tmp > best_delta_h:
@@ -119,7 +310,8 @@ class DevouringPlague(SpellNoPoint):
         for i in range(sample_times):
             tmp_state = state.copy_new_one()
             for j in range(4):
-                tmp_state.random_distribute_damage(1, [i for i in range(tmp_state.oppo_minion_num)], [])
+                tmp_state.random_distribute_damage(
+                    1, [i for i in range(tmp_state.oppo_minion_num)], [])
 
             delta_h_sum += tmp_state.heuristic_value - curr_h
 
@@ -168,17 +360,21 @@ class Hysteria(SpellPointOppo):
                 tmp_chosen_index = chosen_index
 
                 while True:
-                    another_index_list = [j for j in range(tmp_state.oppo_minion_num + tmp_state.my_minion_num)]
+                    another_index_list = [j for j in range(
+                        tmp_state.oppo_minion_num + tmp_state.my_minion_num)]
                     another_index_list.pop(tmp_chosen_index)
                     if len(another_index_list) == 0:
                         break
-                    another_index = another_index_list[random.randint(0, len(another_index_list) - 1)]
+                    another_index = another_index_list[random.randint(
+                        0, len(another_index_list) - 1)]
 
                     # print("another index: ", another_index)
                     if another_index >= tmp_state.oppo_minion_num:
-                        another_minion = tmp_state.my_minions[another_index - tmp_state.oppo_minion_num]
+                        another_minion = tmp_state.my_minions[another_index -
+                                                              tmp_state.oppo_minion_num]
                         if another_minion.get_damaged(chosen_minion.attack):
-                            tmp_state.my_minions.pop(another_index - tmp_state.oppo_minion_num)
+                            tmp_state.my_minions.pop(
+                                another_index - tmp_state.oppo_minion_num)
                     else:
                         another_minion = tmp_state.oppo_minions[another_index]
                         if another_minion.get_damaged(chosen_minion.attack):
@@ -224,12 +420,12 @@ class AgainstAllOdds(SpellNoPoint):
     @classmethod
     def best_h_and_arg(cls, state, hand_card_index):
         return cls.bias + \
-               sum([minion.heuristic_val
-                    for minion in state.oppo_minions
-                    if minion.attack % 2 == 1]) - \
-               sum([minion.heuristic_val
-                    for minion in state.my_minions
-                    if minion.attack % 2 == 1]),
+            sum([minion.heuristic_val
+                 for minion in state.oppo_minions
+                 if minion.attack % 2 == 1]) - \
+            sum([minion.heuristic_val
+                 for minion in state.my_minions
+                 if minion.attack % 2 == 1]),
 
 
 # 锈骑劫匪

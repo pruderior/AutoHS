@@ -375,16 +375,16 @@ def HandleErrorAction():
         return FSM_LEAVE_HS
     else:
         click.commit_error_report()
-        click.click_setting()
-        time.sleep(0.5)
-        # 先尝试点认输
-        click.left_click(960, 380)
-        time.sleep(2)
+        # click.click_setting()
+        # time.sleep(0.5)
+        # # 先尝试点认输
+        # click.left_click(960, 380)
+        # time.sleep(2)
 
-        get_screen.terminate_HS()
-        time.sleep(STATE_CHECK_INTERVAL)
+        # get_screen.terminate_HS()
+        # time.sleep(STATE_CHECK_INTERVAL)
 
-        return FSM_LEAVE_HS
+        # return FSM_LEAVE_HS
 
 
 def FSM_dispatch(next_state):

@@ -7,14 +7,15 @@ from card.basic_card import MinionNoPoint
 from log_state import *
 from log_op import *
 from strategy_entity import *
+from typing import List
 
 
 class StrategyState:
     def __init__(self, log_state=None):
-        self.oppo_minions = []
+        self.oppo_minions: List[StrategyMinion] = []
         self.oppo_graveyard = []
-        self.my_minions = []
-        self.my_hand_cards = []
+        self.my_minions: List[StrategyMinion] = []
+        self.my_hand_cards: List[StrategyEntity] = []
         self.my_graveyard = []
 
         self.my_hero = None
@@ -27,8 +28,10 @@ class StrategyState:
         self.oppo_hand_card_num = 0
 
         self.my_total_mana = int(log_state.my_entity.query_tag("RESOURCES"))
-        self.my_used_mana = int(log_state.my_entity.query_tag("RESOURCES_USED"))
-        self.my_temp_mana = int(log_state.my_entity.query_tag("TEMP_RESOURCES"))
+        self.my_used_mana = int(
+            log_state.my_entity.query_tag("RESOURCES_USED"))
+        self.my_temp_mana = int(
+            log_state.my_entity.query_tag("TEMP_RESOURCES"))
 
         for entity in log_state.entity_dict.values():
             if entity.query_tag("ZONE") == "HAND":
@@ -118,7 +121,8 @@ class StrategyState:
             return
 
         debug_print(f"对手墓地:")
-        debug_print("    " + ", ".join([entity.name for entity in self.oppo_graveyard]))
+        debug_print(
+            "    " + ", ".join([entity.name for entity in self.oppo_graveyard]))
         debug_print(f"对手有{self.oppo_hand_card_num}张手牌")
 
         self.debug_print_battlefield()
@@ -130,7 +134,8 @@ class StrategyState:
             debug_print(f"    [{hand_card.zone_pos}] {hand_card.name} "
                         f"cost:{hand_card.current_cost}")
         debug_print(f"我的墓地:")
-        debug_print("    " + ", ".join([entity.name for entity in self.my_graveyard]))
+        debug_print(
+            "    " + ", ".join([entity.name for entity in self.my_graveyard]))
 
     @property
     def my_last_mana(self):
@@ -248,7 +253,8 @@ class StrategyState:
         if len(oppo_index_list) == len(my_index_list) == 0:
             return
 
-        random_x = random.randint(0, len(oppo_index_list) + len(my_index_list) - 1)
+        random_x = random.randint(
+            0, len(oppo_index_list) + len(my_index_list) - 1)
 
         if random_x < len(oppo_index_list):
             oppo_index = oppo_index_list[random_x]
@@ -286,7 +292,8 @@ class StrategyState:
                                 f"斩杀了")
                     return my_index, -1
 
-                tmp_delta_h = self.oppo_hero.delta_h_after_damage(my_minion.attack)
+                tmp_delta_h = self.oppo_hero.delta_h_after_damage(
+                    my_minion.attack)
 
                 debug_print(f"攻击决策: [{my_index}]({my_minion.name})->"
                             f"[-1]({self.oppo_hero.name}) "
@@ -302,8 +309,10 @@ class StrategyState:
                 oppo_index = oppo_minion.zone_pos - 1
 
                 tmp_delta_h = 0
-                tmp_delta_h -= my_minion.delta_h_after_damage(oppo_minion.attack)
-                tmp_delta_h += oppo_minion.delta_h_after_damage(my_minion.attack)
+                tmp_delta_h -= my_minion.delta_h_after_damage(
+                    oppo_minion.attack)
+                tmp_delta_h += oppo_minion.delta_h_after_damage(
+                    my_minion.attack)
 
                 debug_print(f"攻击决策：[{my_index}]({my_minion.name})->"
                             f"[{oppo_index}]({oppo_minion.name}) "
@@ -329,8 +338,10 @@ class StrategyState:
                 oppo_index = oppo_minion.zone_pos - 1
 
                 tmp_delta_h = 0
-                tmp_delta_h += oppo_minion.delta_h_after_damage(self.my_hero.attack)
-                tmp_delta_h -= self.my_hero.delta_h_after_damage(oppo_minion.attack)
+                tmp_delta_h += oppo_minion.delta_h_after_damage(
+                    self.my_hero.attack)
+                tmp_delta_h -= self.my_hero.delta_h_after_damage(
+                    oppo_minion.attack)
                 if self.my_weapon is not None:
                     tmp_delta_h -= self.my_weapon.attack
 
@@ -390,13 +401,16 @@ class StrategyState:
             detail_card = hand_card.detail_card
             if detail_card is None:
                 if hand_card.cardtype == CARD_MINION and not hand_card.battlecry:
-                    delta_h, *args = MinionNoPoint.best_h_and_arg(self, hand_card_index)
+                    delta_h, * \
+                        args = MinionNoPoint.best_h_and_arg(
+                            self, hand_card_index)
                     debug_print(f"卡牌-[{hand_card_index}]({hand_card.name}) "
                                 f"delta_h: {delta_h}, *args: {[]} (默认行为) ")
                 else:
                     debug_print(f"卡牌[{hand_card_index}]({hand_card.name})无法评判")
             else:
-                delta_h, *args = detail_card.best_h_and_arg(self, hand_card_index)
+                delta_h, * \
+                    args = detail_card.best_h_and_arg(self, hand_card_index)
                 debug_print(f"卡牌-[{hand_card_index}]({hand_card.name}) "
                             f"delta_h: {delta_h}, *args: {args} (手写行为)")
 
@@ -469,11 +483,13 @@ if __name__ == "__main__":
                 f.write(str(state))
 
             mine_index, oppo_index = strategy_state.get_best_attack_target()
-            debug_print(f"我的决策是: mine_index: {mine_index}, oppo_index: {oppo_index}")
+            debug_print(
+                f"我的决策是: mine_index: {mine_index}, oppo_index: {oppo_index}")
 
             if mine_index != -1:
                 if oppo_index == -1:
-                    click.minion_beat_hero(mine_index, strategy_state.my_minion_num)
+                    click.minion_beat_hero(
+                        mine_index, strategy_state.my_minion_num)
                 else:
                     click.minion_beat_minion(mine_index, strategy_state.my_minion_num,
                                              oppo_index, strategy_state.oppo_minion_num)
